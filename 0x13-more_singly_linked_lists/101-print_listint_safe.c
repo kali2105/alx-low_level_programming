@@ -12,7 +12,6 @@ size_t cal_number_nodes(const listint_t *head)
 {
 	size_t nodes = 1;
 	const listint_t *t, *h;
-	
 
 	if (head == NULL || head->next == NULL)
 	{

@@ -77,14 +77,13 @@ int main(int argc, char *argv[])
 		if (oppp == -1 || wr == -1)
 		{
 			dprintf(STDERR_FILENO,
-				"Error: Can't write oppp %s\n", argv[2]);
+				"Error: Can't write to %s\n", argv[2]);
 			free(buff);
 			exit(99);
 		}
 		rd = read(opp, buff, 1024);
-		oppp = open(argv[2], O_WRONLY | O_APPEND);
 
-	} while (rd > 0);
+	} while (rd >= 0);
 	free(buff);
 	close_file(opp);
 	close_file(oppp);

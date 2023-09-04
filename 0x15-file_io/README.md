@@ -82,8 +82,6 @@
 	- Confirm if the code is running by following the below steps:
 		- Run `readelf` first with the `--header` / `-h` option:
 			```sh
-			 [main !?] root@0331426d386b : [ ~/alx-low_level_programming/0x15-file_io ] 
-			 $ readelf -h /lib/ld-linux.so.2
 			 ELF Header:
 			 Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
 			 Class:                             ELF32
@@ -107,8 +105,6 @@
 			```
 		- Then confirm with your compiled program:
 			```sh
-			[main !?] root@0331426d386b : [ ~/alx-low_level_programming/0x15-file_io ] 
-			$ ./elf_header /lib/ld-linux.so.2 
 			ELF Header:
 			Magic    7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00
 			Class:                             ELF32

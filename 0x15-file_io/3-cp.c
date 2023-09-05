@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void close_file(int dc);
 char *create_buffer(char *file);
-void close_file(int fd);
 
 /**
  * create_buffer - A function thst allocates 1024 bytes for a buffer
@@ -13,81 +13,83 @@ void close_file(int fd);
  */
 char *create_buffer(char *file)
 {
-	char *buff;
+	char *buffer;
 
-	buff = malloc(sizeof(char) * 1024);
+	buffer = malloc(sizeof(char) * 1024);
 
-	if (buff == NULL)
+	if (buffer == NULL)
 	{
 		dprintf(STDERR_FILENO,
-			"Error: Can't write oppp %s\n", file);
+			"Error: Can't write to %s\n", file);
 		exit(99);
 	}
-	return (buff);
+	return (buffer);
 }
-
 /**
  * close_file - A function thst closes file descriptors
- * @fd: The file descriptor oppp be closed
+ * @dc: The file descriptor to be closed
  */
-void close_file(int fd)
+void close_file(int dc)
 {
-	int cl;
+	int c;
 
-	cl = close(fd);
+	c = close(dc);
 
-	if (cl == -1)
+	if (c == -1)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		dprintf(STDERR_FILENO, "Error: Can't close dc %d\n", dc);
 		exit(100);
 	}
 }
-
 /**
  * main - A function that copies the contents of a file to another file
- * @argc: The number of arguments supplied from the program
- * @argv: An array of pointers from the  given arguments
+ * @argc: The number of arguments supplied to the program
+ * @argv: An array of pointers to the arguments
  *
- * Return: 0 (SUCCESS)
+ * Return: 0 on success.
  */
 int main(int argc, char *argv[])
 {
-	int opp, oppp, rd, wr;
-	char *buff;
+	int from, to, r, w;
+	char *buffer;
 
 	if (argc != 3)
 	{
 		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
 		exit(97);
 	}
-	buff = create_buffer(argv[2]);
-	opp = open(argv[1], O_RDONLY);
-	rd = read(opp, buff, 1024);
-	oppp = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+
+	buffer = create_buffer(argv[2]);
+	from = open(argv[1], O_RDONLY);
+	r = read(from, buffer, 1024);
+	to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
 
 	do {
-		if (opp == -1 || rd == -1)
+		if (from == -1 || r == -1)
 		{
 			dprintf(STDERR_FILENO,
 				"Error: Can't read from file %s\n", argv[1]);
-			free(buff);
+			free(buffer);
 			exit(98);
 		}
-		wr = write(oppp, buff, rd);
-		if (oppp == -1 || wr == -1)
+
+		w = write(to, buffer, r);
+		if (to == -1 || w == -1)
 		{
 			dprintf(STDERR_FILENO,
 				"Error: Can't write to %s\n", argv[2]);
-			free(buff);
+			free(buffer);
 			exit(99);
 		}
-		rd = read(opp, buff, 1024);
-		oppp = open(argv[2], O_WRONLY | O_APPEND);
 
-	} while (rd >= 0);
-	free(buff);
-	close_file(opp);
-	close_file(oppp);
+		r = read(from, buffer, 1024);
+		to = open(argv[2], O_WRONLY | O_APPEND);
+
+	} while (r > 0);
+
+	free(buffer);
+	close_file(from);
+	close_file(to);
 
 	return (0);
 }

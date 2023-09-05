@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
 			exit(99);
 		}
 		rd = read(opp, buff, 1024);
+		oppp = open(argv[2], O_WRONLY | O_APPEND);
 
 	} while (rd >= 0);
 	free(buff);
